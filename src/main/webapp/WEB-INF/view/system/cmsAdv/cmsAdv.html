@@ -1,0 +1,49 @@
+@layout("/common/_commonList.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>广告管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <form id="inputForm">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <#ap_NameCon id="advName" name="advName" title="名称" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <#ap_selectCon dictKey="status" id="status" name="status" title="广告状态" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <#ap_selectCon dictKey="advPosition" id="advPosition"  name="advPosition" title="广告位置" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <#TimeCon id="startTime" title="开始时间" name="startTime"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <#TimeCon id="endTime" title="结束时间" name="endTime"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <#button name="搜索" icon="fa-search" clickFun="AplusList.search()"/>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="hidden-xs" id="ListTableToolbar" role="group">
+                            <#button name="添加" icon="fa-plus" clickFun="AplusList.openDialog('/S100001/cmsAdv_add','添加')"/>
+                            <#button name="修改" icon="aa" clickFun="AplusList.openReviseDialog('/S100001/cmsAdv_update/','advId','修改广告')"/>
+                            <#button btnCss="danger" name="删除" icon="fa-minus" clickFun="AplusList.openCfmDialog('/S100001/delete/','删除广告','advId')"/>
+                        </div>
+
+                        <#table id="ListTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/cmsAdv/cmsAdv.js"></script>
+@}

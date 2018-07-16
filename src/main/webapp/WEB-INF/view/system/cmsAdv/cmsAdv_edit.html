@@ -1,0 +1,161 @@
+@layout("/common/_commonAdd.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+        <input type="hidden" name="layerDialogId" id="layerDialogId">
+         <input type="hidden" id="advp" name="广告位置" value="${item.advPosition}"/>
+         <input type="hidden" id="advt" name="广告类型" value="${item.advType}"/>
+         <input type="hidden" id="advCampCode" name="advCampCode" size="10" title="基金代码" value="${item.advCampCode}"/>
+               <form enctype="multipart/form-data" id="addForm">
+                    <input type="hidden" name="advId" id="advId" value="${item.advId}">
+                   
+                <div class="row">
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <#ap_input name="advName" size="10" title="广告名称" value="${item.advName}" />
+                       </div>
+                       <div class="col-sm-6">
+                           <#ap_radio dictKey="status" title="广告状态" appId="aplus-cms" id="status" name="status" value="${item.status}"/>
+                       </div>
+                   </div>
+
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <#input id="startTime" name="开始时间" value="${item.startTime}"
+                           clickFun="laydate({istime: true, format:'YYYY-MM-DD hh:mm:ss'})"
+                           underline="true" />
+                       </div>
+                       <div class="col-sm-6">
+                           <#input id="endTime" name="结束时间" value="${item.endTime}"
+                           clickFun="laydate({istime: true, format:'YYYY-MM-DD hh:mm:ss'})"
+                           underline="true" />
+                       </div>
+                   </div>
+
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <#ap_select dictKey="advPosition" id="advPosition" name="advPosition" title="广告位置" value="${item.advPosition}"/>
+                       </div>
+                       
+                        <div class="col-sm-6">
+                           <#ap_input name="advSort" title="广告排序" value="${item.advSort}" underline="true"/>
+                       </div>
+                   </div>
+                   <div class="row">
+                       <div class="col-sm-6">
+                            <#ap_radioCon dictKey="advType" value="${item.advType}" title="所属类型" appId="aplus-cms" id="advType" name="advType" />
+                       </div>
+                       <div class="col-sm-6 fundCode">
+					         <#ap_input id="advFundCode" name="advFundCode" size="10" title="基金代码" value="${item.advFundCode}" />
+                       </div>
+                       
+                   </div>
+
+                      <div class="row">
+                       <div class="col-sm-6 advUrlDiv">
+                           <#ap_input size="10" id="advUrl" name="advUrl" title="广告地址" value="${item.advUrl}" />
+                       </div>
+                       <div class="col-sm-6 campCodeList">
+                            <#select  id="advCampCode" style="width:60%" name="关联活动">
+						      <option value="">---请选择---</option>
+					        </#select>
+                       </div>
+                       
+                   </div>
+                   <div class="row">
+                       <div class="col-sm-2">
+                           	<label class="col-sm-12 control-label">广告图片</label>
+                           	</div>
+                           	<div class="col-sm-8">
+							<input id="advPic" name="advPic" class="file" type="file" multiple data-max-file-count="1" data-show-upload="false" data-initial-preview="${item.imgUrl}" />
+                       </div>
+                   </div>
+                   </div>
+               </form>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AplusAdd.submitByForm('/S100001/update','确定要修改该广告吗？')"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AplusAdd.close()"/>
+                </div>
+         </div>
+</div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/cmsAdv/cmsAdv_info.js"></script>
+    <link href="${ctxPath}/static/upload/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="${ctxPath}/static/upload/js/fileinput.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/jquery-form.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/jquery.form.min.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/locales/fr.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/locales/es.js" type="text/javascript"></script>
+    <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js" type="text/javascript"></script>
+    
+  <script>
+  var st = document.getElementById('advt').value;
+	if(st=="campAdv"){
+		 /* $(".campCodeList").show();
+		 $(".fundCode").hide(); */
+		 $("[name='advCampCode']").removeAttr('disabled');
+         $("#advFundCode").attr('disabled','disabled');
+         $("#advUrl").attr('disabled','disabled');
+	}else if(st=="fundDetail"){
+		$("[name='advCampCode']").attr('disabled','disabled');
+        $("#advFundCode").removeAttr('disabled');
+        $("#advUrl").attr('disabled','disabled');
+	}else{
+		/* $(".campCodeList").hide();
+		$(".fundCode").hide(); */
+		 $("[name='advCampCode']").attr('disabled','disabled');
+         $("#advFundCode").attr('disabled','disabled');
+         $("#advUrl").removeAttr('disabled');
+	}
+    var adv = {};
+    adv.validateFields = {
+        //excluded: ':disabled',//关键配置，表示只对于禁用域不进行验证，其他的表单元素都要验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',//显示验证成功或者失败时的一个小图标
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            advName: {
+                validators: {
+                    notEmpty: {
+                        message: '广告名称不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '广告名称不能为空2-50位'
+                    }
+                }
+            },
+            maxSize: {
+                validators: {
+                    notEmpty: {
+                        message: '请输入广告最大的展示数量'
+                    },
+                    digits: {
+                        message: '该值只能包含数字。'
+                    }
+                }
+            },
+            advSort: {
+                validators: {
+                    notEmpty: {
+                        message: '排序值不能为空'
+                    },
+                    digits: {
+                        message: '该值只能包含数字。'
+                    }
+                }
+            }
+        }
+    }
+    $(function () {
+        Feng.initValidator("addForm", adv.validateFields);
+    });
+
+</script>
+@}

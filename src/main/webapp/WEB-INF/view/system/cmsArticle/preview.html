@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link href="${templateCssPath!}" media="all" rel="stylesheet" type="text/css" />
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <title>${articleTitle!}-资讯预览</title>
+    <script>
+        function downloadApp() {
+            //判断浏览器
+            var u = navigator.userAgent;
+
+            // 如果用户在微信中点击下载App按钮，则引导用户去浏览器中操作
+//		if(/MicroMessenger/gi.test(u)) {
+//			alert('请在浏览器中打开');
+//			return;
+//		}
+
+            if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) { //Android
+//			if(openApp('haha://')) {
+                openApp('haha://');
+//				timer = setTimeout(function() {
+//					window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.phfund.wallet";
+//				}, 2000);
+                var d = new Date();
+                var t0 = d.getTime();
+                var delay = setInterval(function(){
+                    var d = new Date();
+                    var t1 = d.getTime();
+                    if( t1-t0<3000 && t1-t0>2000){
+                        window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.phfund.wallet";
+                    }
+                    if(t1-t0>=3000){
+                        clearInterval(delay);
+                    }
+                },1000);
+//			}else {
+                //由于打开需要1～2秒，利用这个时间差来处理－－打开app后，返回h5页面会出现页面变成app下载页面，影响用户体验
+//				window.location = 'haha://';
+//				timer = setTimeout(function() {
+//					window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.phfund.wallet";
+//				}, 2000);
+//			}
+            }else if(u.indexOf('iPhone') > -1) { //iOS
+//            if(openApp('penghua://')) {
+//				openApp('penghua://')
+//            }else {
+                window.location = 'penghua://';
+                timer = setTimeout(function() {
+                    window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.phfund.wallet";
+                }, 2000);
+//            }
+            }else {
+                console.log('电脑上打开的~');
+                window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.phfund.wallet";
+            }
+        }
+
+        function openApp(src) {
+            // 通过iframe的方式试图打开APP，如果能正常打开，会直接切换到APP，并自动阻止a标签的默认行为，否则打开a标签的href链接
+            var iframe = document.createElement('iframe');
+            iframe.style.cssText='display:none; width=0; height=0';
+            document.body.appendChild(iframe);
+            iframe.src = src;
+            window.setTimeout(function() {
+                document.body.removeChild(ifr);
+            }, 500);
+        }
+    </script>
+</head>
+<body>
+    ${content}
+</body>
+</html>

@@ -1,0 +1,163 @@
+@layout("/common/_commonAdd.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+     
+        <div class="form-horizontal">
+             <input type="hidden" name="layerDialogId" id="layerDialogId">
+             <input type="hidden" id="advCampCode" name="活动广告" value="nothing"/>
+            <form enctype="multipart/form-data" id="addForm">
+            <input type="hidden" id="id" value="">
+            <div class="row">
+            
+            	 <div class="row">
+                    <div class="col-sm-6">
+                        <#NameCon id="advName" name="广告名称" />
+                    </div>
+                    <div class="col-sm-6">
+                         <#ap_radioCon dictKey="status" title="广告状态" appId="aplus-cms" id="status" name="status" />
+                    </div>
+                  </div>
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <#TimeCon id="startTime" name="startTime" title="开始时间" isTime="true"  pattern="YYYY-MM-DD hh:mm:ss"/>
+                       </div>
+                       <div class="col-sm-6">
+                           <#TimeCon id="endTime" name="endTime" title="结束时间" isTime="true"  pattern="YYYY-MM-DD 23:59:59"/>
+                       </div>
+                   </div>
+                   
+                   <div class="row">
+                       <div class="col-sm-6">
+                            <#ap_selectCon dictKey="advPosition" id="advPosition" name="advPosition" title="广告位置"/>
+                       </div>
+                        <div class="col-sm-6">
+                            <#ap_radioCon dictKey="advType" title="所属类型" appId="aplus-cms" id="advType" name="advType" />
+                       </div>
+                      
+                   </div>
+                   
+                   <div class="row">
+                       <div class="col-sm-6 advUrlDiv">
+                           <#NameCon id="advUrl" name="广告地址"/>
+                       </div>
+                       <div class="col-sm-6 campCodeList">
+                            <#select class="campCodeList" id="advCampCode" style="width:60%" name="关联活动">
+						      <option value="">---请选择---</option>
+					        </#select>
+                       </div>
+                       <div class="col-sm-6 fundCode" >
+					         <#NameCon id="advFundCode" name="基金代码" />
+                       </div>
+                        <div class="col-sm-6">
+                           <#ap_input name="advSort" title="广告排序" underline="true"/>
+                       </div>
+                   </div>
+                   <div class="row">
+                       <div class="col-sm-2">
+                           	<label class="col-sm-12 control-label">广告图片</label>
+                           	</div>
+                           	<div class="col-sm-8">
+							<input name="advPic" class="file" type="file" multiple data-max-file-count="1" data-show-upload="false">
+                       </div>
+                   </div>
+                </div>
+                </form>  
+            </div>
+        
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AplusAdd.submitByForm('/S100001/add','确定要添加该广告吗？')"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AplusAdd.close()"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="${ctxPath}/static/modular/system/cmsAdv/cmsAdv_info.js"></script>
+    <link href="${ctxPath}/static/upload/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="${ctxPath}/static/upload/js/fileinput.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/jquery-form.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/jquery.form.min.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/locales/fr.js" type="text/javascript"></script>
+    <script src="${ctxPath}/static/upload/js/locales/es.js" type="text/javascript"></script>
+    <script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js" type="text/javascript"></script>
+
+<script>
+    var adv = {};
+    adv.validateFields = {	
+        excluded: ':disabled',//关键配置，表示只对于禁用域不进行验证，其他的表单元素都要验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',//显示验证成功或者失败时的一个小图标
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+       
+            advName: {
+                validators: {
+                    notEmpty: {
+                        message: '广告名称不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 50,
+                        message: '广告名称不能为空2-50位'
+                    }
+                }
+            },
+            
+            advPosition: {
+                validators: {
+                    notEmpty: {
+                        message: '广告位置不能为空！'
+                    }
+                    
+                }
+            },
+           
+            startTime: {
+                validators: {
+                    notEmpty: {
+                        message: '广告开始时间不能为空！'
+                    }
+                    
+                }
+            },
+            endTime: {
+                validators: {
+                    notEmpty: {
+                        message: '广告结束时间不能为空！'
+                    }
+                    
+                }
+            },
+            advPic: {
+                validators: {
+                    notEmpty: {
+                        message: '广告图片不能为空!'
+                    }
+                    
+                }
+            },
+            advSort: {
+                validators: {
+                    notEmpty: {
+                        message: '排序值不能为空'
+                    },
+                    digits: {
+                        message: '该值只能包含数字。'
+                    }
+                }
+            }
+            
+          
+    };
+    $(function () {
+    	$("[name='advCampCode']").removeAttr('disabled');
+        $("#advFundCode").attr('disabled','disabled');
+        $("#advUrl").attr('disabled','disabled');
+        Feng.initValidator("addForm", adv.validateFields);
+    });
+
+</script>
+@}

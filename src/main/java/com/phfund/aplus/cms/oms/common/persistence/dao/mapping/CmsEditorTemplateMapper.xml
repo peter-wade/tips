@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.common.persistence.dao.CmsEditorTemplateMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.phfund.aplus.cms.oms.common.persistence.model.CmsEditorTemplate">
+		<result column="group_code" property="groupCode" />
+		<result column="template_code" property="templateCode" />
+		<result column="template_name" property="templateName" />
+		<result column="template_path" property="templatePath" />
+		<result column="sort_no" property="sortNo" />
+		<result column="content" property="content" />
+		<result column="data_state" property="dataState" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+	</resultMap>
+
+	<select id="queryCmsEditorTemplateList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		   t.group_code,
+		   t.template_code,
+		   t.template_name,
+		   t.template_path,
+		   t.sort_no,
+		   t.content
+		from
+		   cms_editor_template t where t.data_state = '1'
+		   <if test="groupCode!=null and groupCode!=''">
+			   and t.group_code = #{groupCode}
+		   </if>
+		   order by t.sort_no asc
+	</select>
+
+
+	<select id="selectById" resultMap="BaseResultMap" parameterType="String">
+		select
+		   t.group_code,
+		   t.template_code,
+		   t.template_name,
+		   t.template_path,
+		   t.sort_no,
+		   t.content
+		from
+		   cms_editor_template t where t.template_code = #{templateCode}
+	</select>
+
+
+</mapper>

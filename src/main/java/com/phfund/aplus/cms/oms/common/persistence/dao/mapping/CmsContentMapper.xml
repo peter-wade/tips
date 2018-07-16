@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.common.persistence.dao.CmsContentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.phfund.aplus.cms.oms.common.persistence.model.CmsContent">
+		<result column="content_type" property="contentType" />
+		<result column="editor_template_code" property="editorTemplateCode" />
+		<result column="content" property="content" />
+		<result column="id" property="id" />
+		<result column="article_id" property="articleId" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        article_id,content_type,editor_template_code, content, id, create_by, create_date , update_by , update_date
+    </sql>
+    
+    
+     <insert id="addContent" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsContent">
+		insert into cms_content
+					(
+					article_id,
+					content_type,
+					content,
+					editor_template_code,
+					id,
+					create_by,
+					create_date,
+					update_by,
+					update_date)
+					values
+						(
+						#{articleId},
+						#{contentType},
+						#{content},
+						#{editorTemplateCode},
+						#{id},
+						#{createBy},
+						sysdate(),
+						#{updateBy},
+						sysdate()
+					)
+	</insert>
+    <select id="selectAll" resultMap="BaseResultMap" resultType="List">
+       select 
+	  	<include refid="Base_Column_List" /> 
+       from cms_content
+    </select>
+    
+    
+    <select id="selectById" resultMap="BaseResultMap">
+       select 
+	  	<include refid="Base_Column_List" /> 
+       from cms_content t where t.id=#{id} 
+    </select>
+    
+    <select id="selectByArticleId" resultMap="BaseResultMap">
+       select 
+	  	<include refid="Base_Column_List" /> 
+       from cms_content t where t.article_id=#{articleId} 
+    </select>
+    
+    
+    <delete id="deleteById">
+       delete from cms_content where id=#{id}
+    </delete>
+    
+    <update id="updateById">
+
+      update cms_content set content=#{content},editor_template_code=#{editorTemplateCode} where article_id=#{articleId}
+
+    </update>
+    
+
+</mapper>

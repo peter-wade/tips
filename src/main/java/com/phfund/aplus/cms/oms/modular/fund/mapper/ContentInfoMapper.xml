@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.modular.fund.mapper.ContentInfoMapper">
+	<!-- 查询组合基金的评论信息 -->
+	<select id="queryFundContentInfo" parameterType="java.util.Map" resultType="com.phfund.aplus.cms.oms.modular.fund.vo.FundCommentInfoVo">
+			select t.portfolio_code portfolioCode,
+			       s.portfolio_name portfolioName,
+			       t.comments_code commentsCode,
+			       t.cust_short_name custShortName,
+			       t.comments_time commentsTime,
+			       t.content content,
+			       t.review_status reviewStatus
+			 from tspdata.comments_detail t
+			 left join tspdata.portfolio_info s
+			 on t.portfolio_code = s.portfolio_code
+			 where 1 = 1
+			       <if test="portfolioCode!=null and portfolioCode!=''">
+			          and t.portfolio_code = #{portfolioCode}
+			       </if>
+			       <if test="portfolioName!=null and portfolioName!=''">
+			          and s.portfolio_name like '%' || #{portfolioName} || '%'
+			       </if>
+			       <if test="commentsCode!=null and commentsCode!=''">
+			          and t.comments_code = #{commentsCode}
+			       </if>
+			       <if test="custShortName!=null and custShortName!=''">
+			          and t.cust_short_name like '%' || #{custShortName} || '%'
+			       </if>
+			       <if test="startTime!=null and startTime!=''">
+			          and t.comments_time &gt;=  #{startTime}
+			       </if>       
+			       <if test="endTime!=null and endTime!=''">
+			          and t.comments_time &lt;= #{endTime}
+			       </if>
+			        <if test="reviewStatus!=null and reviewStatus!=''">
+			          and t.review_status = #{reviewStatus}
+			       </if> 
+			       order by t.comments_time desc
+	</select>
+	<!-- 更新客户审核状态 -->
+	<update id="updateContentStatus"  parameterType="java.util.Map">
+		update tspdata.comments_detail t
+		set t.review_status = #{reviewStatus},
+			t.update_by = #{user},
+			t.update_date = sysdate
+		where t.comments_code = #{commentsCode}
+	</update>
+</mapper>

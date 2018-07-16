@@ -1,0 +1,87 @@
+@layout("/common/_commonAdd.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="noticeInfoForm">
+            <input type="hidden" name="layerDialogId" id="layerDialogId">
+            <input type="hidden" id="articletagsNames" value="${item.tagsNames}">
+             <form enctype="multipart/form-data" id="addForm" autocomplete="off">
+               <input type="hidden" id="articleId" name="articleId" value="${item.articleId}">
+                    <div class="col-sm-12">
+                        
+                        <label class="col-sm-2 input-label">文章id</label> 
+                        <label class="col-sm-4 input-label">${item.articleId}</label> 
+                         <label class="col-sm-2 input-label">文章标题</label> 
+                         <label class="col-sm-4 input-label">${item.articleTitle}</label> 
+                    </div>
+                   
+                    <div>
+                        <label class="col-sm-2 input-label">开始时间</label> 
+                         <label class="col-sm-4 input-label">${item.startTime}</label> 
+                         <label class="col-sm-2 input-label">结束时间</label> 
+                         <label class="col-sm-4 input-label">${item.endTime}</label> 
+                    </div>
+                    <div>
+                        <label class="col-sm-2 input-label">文章类型</label> 
+                         <label class="col-sm-4 input-label">${item.articleType}</label> 
+                         <label class="col-sm-2 input-label">文章摘要</label> 
+                         <label class="col-sm-4 input-label">${item.summary}</label> 
+                    </div>
+                     <div class="col-sm-12">
+                        <label class="col-sm-2 input-label">标题简称</label> 
+                         <label class="col-sm-4 input-label">${item.articleTitleShortname}</label>
+                         <label class="col-sm-2 input-label">选择标签</label> 
+                         <label class="col-sm-4 input-label">${item.tagsNames}</label> 
+                    </div>
+			    <div class="row">
+			        <div class="col-sm-2">
+			        	<label class="col-sm-12 control-label">资讯内容</label>
+			        </div>
+			        <div class="col-sm-8">
+					<script id="articleContent" name="content" type="text/plain" style="width:700px;height:400px;"></script>
+					</div>
+		    	</div>
+		    	
+    
+            <div class="row">
+                <div class="col-sm-12">
+                <div class="form-group">
+                        <lable class="col-sm-1 control-label"></lable>
+                        <div class="col-sm-11" style="padding-left:88px">
+                            <div id="editor" class="editorHeight">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/cmsArticle/cmsArticle_info.js"></script>
+	<!-- 上传控件 -->
+	<script src="${ctxPath}/static/modular/system/cmsArticle/cmsArticle_info.js"></script>
+	<link href="${ctxPath}/static/upload/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+	<script src="${ctxPath}/static/upload/js/fileinput.js" type="text/javascript"></script>
+	
+	<!-- 百度编辑器 -->
+    <script type="text/javascript" charset="utf-8" src="${ctxPath}/static/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${ctxPath}/static/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="${ctxPath}/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+     
+     <!-- w -->
+    <link href="${ctxPath}/static/tag/jquery.tag-editor.css" media="all" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" charset="utf-8" src="${ctxPath}/static/tag/jquery.tag-editor.min.js"> </script>
+    
+    <script>
+    var content = UE.getEditor('articleContent');
+    $(function () {
+    	
+	   	UE.getEditor('articleContent').addListener("ready", function () {
+	   	// editor准备好之后才可以使用
+	   	UE.getEditor('articleContent').setContent('${item.content}');
+	    UE.getEditor('articleContent').setDisabled('fullscreen');
+	   	});
+    });
+    </script>
+@}

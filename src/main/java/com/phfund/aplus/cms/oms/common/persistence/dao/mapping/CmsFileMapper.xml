@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.common.persistence.dao.CmsFileMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.phfund.aplus.cms.oms.common.persistence.model.CmsFile">
+		<result column="file_id" property="fileId" />
+		<result column="file_name" property="fileName" />
+		<result column="upload_time" property="uploadTime" />
+		<result column="server_file_name" property="serverFileName" />
+		<result column="file_type" property="fileType" />
+		<result column="file_catalog" property="fileCatalog" />
+		<result column="id" property="id" />
+		<result column="seq_num" property="seqNum" />
+		<result column="create_by" property="createBy" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+
+        file_id as fileId, file_name as fileName, upload_time as uploadTime,
+         server_file_name as serverFileName, file_type as fileType, 
+         file_catalog as fileCatalog, id as id, seq_num as seqNum, create_by as createBy
+    </sql>
+    
+    <insert id="addFile" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsFile">
+		insert into cms_file
+					(
+					file_id,
+					file_name,
+					upload_time,
+					server_file_name,
+					file_type,
+					file_catalog,
+					id,
+					seq_num,
+					create_by
+					)
+					values
+						(
+						#{fileId},
+						#{fileName},
+						sysdate(),
+						#{serverFileName},
+						#{fileType},
+						#{fileCatalog},
+						#{id},
+						#{seqNum},
+						#{createBy}
+					)
+	</insert>
+	
+	
+	
+	
+	<update id="updateFile" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsFile">
+	   update cms_file t
+	      set t.server_file_name=#{serverFileName} where t.id=#{id}
+	</update>
+	
+    <select id="queryFilelist" parameterType="java.util.Map" resultType="com.phfund.aplus.cms.oms.common.persistence.model.CmsFile" >
+    		select <include refid="Base_Column_List"/> from cms_file t
+		where t.file_catalog = #{fileCatalog}
+			and (t.data_state = '1' or t.data_state is null)
+			<if test="operator != null and operator != ''">
+			and t.create_by = #{operator}
+			</if>
+			<if test="starttime != null and starttime != ''">
+			and t.upload_time &gt;= #{starttime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+			and t.upload_time &lt;= #{endTime}
+			</if>
+		order by t.upload_time desc
+    </select>
+    
+	<update id="deleteCmsFile" parameterType="java.util.Map">
+		update cms_file t set t.data_state = '0',
+							t.update_by = #{operator},
+							t.update_date = sysdate()
+		where t.file_id = #{fileId}
+	</update>
+
+</mapper>

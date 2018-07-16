@@ -1,0 +1,56 @@
+@layout("/common/_commonList.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>组合基金评论列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                    <form id="inputForm">
+	                        <div class="row">
+	                           <div class="col-sm-2">
+	                               <#NameCon id="portfolioCode" name="组合代码" />
+	                           </div>
+	                           <div class="col-sm-2">
+	                               <#NameCon id="portfolioName" name="组合名称" />
+	                           </div>
+	                           <div class="col-sm-2">
+	                              <#NameCon id="commentsCode" name="评论代码" />
+	                           </div>
+	                           <div class="col-sm-2">
+	                              <#NameCon id="custShortName" name="客户昵称" />
+	                           </div>
+	                        </div>
+	                        <div class="row">
+	                           <div class="col-sm-2">
+									<#ap_selectCon dictKey="review_status" id="reviewStatus" name="reviewStatus"  title="审核状态" value=""/>	
+	                           </div>
+	                           <div class="col-sm-2">
+	                             <#TimeCon id="startTime" name="startTime" title="开始时间" isTime="false"  pattern="YYYY-MM-DD"/>
+	                           </div>
+	                           <div class="col-sm-2">
+	                               <#TimeCon id="endTime" name="endTime"  title="结束时间" isTime="false" pattern="YYYY-MM-DD"/>
+	                           </div>
+	                          <div class="col-sm-4">
+	                              <#button name="搜索" icon="fa-search" clickFun="AplusList.search()"/>
+	                              <#button name="重置" icon="fa-trash" clickFun="AplusList.reset()" space="true"/>
+	                          </div>
+	                        </div>
+                            <div class="hidden-xs" id="ListTableToolbar" role="group">
+                                 @if(shiro.hasPermission("/S100002/update")){
+                                     <#button name="审核通过" icon="aa" clickFun="AplusList.openCfmDialog('/S100002/update?reviewStatus=1','审核通过所选择的评论','commentsCode')"/>
+                                     <#button name="审核驳回" icon="aa" clickFun="AplusList.openCfmDialog('/S100002/update?reviewStatus=0','审核不通过所选择的评论','commentsCode')"/>
+                                 @}
+                            </div>
+	                     </form>
+                        <#table id="ListTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/fund/fundCommentInfo.js"></script>
+@}

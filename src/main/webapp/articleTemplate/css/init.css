@@ -1,0 +1,91 @@
+*{
+	margin: 0;
+	padding:0;
+}
+h3{
+	padding: 10px 
+}
+.titAttr{
+	padding: 0 10px;
+	color: #ccc;
+	font-size: 15px;
+    display: flex;
+    justify-content: space-between; 
+}
+.content{
+	border-top: 1px solid #efefef;
+	padding:  10px;
+	border-bottom: 8px solid #efefef;
+	margin-top:10px;
+	font-size: 15px; 
+    color: #979797;
+  		line-height: 1.6;
+}
+.content p{
+	text-indent: 18px
+}
+.hot .head{
+	padding: 12px 10px;
+	height: 20px;
+	line-height: 20px;
+	display: flex;
+	align-items: center;
+	font-weight: bold;
+}
+.hot .head::before{
+	content: '';
+	display: inline-block;
+	height: 80%;
+	width: 5px;
+	background:#C8303F;
+	margin-right: 4px; 
+}
+.hot>ul>li {
+	border-top: 1px solid #efefef;
+    padding: 10px;
+  		box-sizing: border-box;
+}
+.hot>ul>li .main,.hot>ul>li .attr{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.hot>ul>li .main img{
+	width: 34%;
+}
+.hot>ul li .attr{
+    color: #b7b7b7;
+  		font-size: 13px;
+  		margin-top: 6px;
+}
+.hot>ul li .attr .l{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 34%;
+}
+.hot>ul li .attr .l div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 1px 3px;
+    margin-right: 5px;
+    font-size: 10px;
+}
+.hot>ul li .attr .l div img{
+	width: 20%
+}
+.hot>ul li .attr .l div span{
+	font-size: 10px;
+	transform: scale(0.8);
+}
+.main h5{
+    font-size: 15px;
+    overflow:hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp:2;
+	-webkit-box-orient:vertical
+}

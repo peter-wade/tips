@@ -1,0 +1,88 @@
+/*可以在这里添加你自己的css*/
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    max-width: 768px;
+    margin: 0 auto;
+}
+.head-img img{
+    width: 100%;
+    position: relative;
+}
+.head-img .wd{
+    position: absolute;
+    text-align: center;
+    width:80%;
+    left: 10%;
+    margin-top: 14px;
+    z-index: 1;
+    color: #fff;
+}
+.head-img .wd h4{
+    font-size: 25px;
+    font-weight: normal;
+}
+.head-img .wd p{
+    margin-top: 6px;
+    font-weight:normal;
+    font-size: 18px
+}
+.content{
+    padding: 10px;
+    margin-top:10px;
+    box-sizing: border-box;
+}
+.content .ch .head{
+    display: flex;
+    align-items: center;
+    margin-bottom:6px;
+}
+.content .ch .head img{
+    width: 20px;
+    margin-right: 6px;
+}
+.content .ch .head div{
+    font-weight: bold;
+    font-size: 17px
+}
+.content .ch .de{
+    color: #787878;
+    font-size: 15px;
+    padding: 10px 0;
+}
+.content .t{
+    border-top:1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
+    padding: 12px 0;
+    margin: 12px 0;
+}
+.content .t ul li{
+    display: flex;
+    padding: 6px 0
+}
+.content .t ul li span{
+    background: #F18790;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    text-align: center;
+    font-size: 13px
+}
+.content .t ul li p{
+    width: 90%;
+    color: #787878;
+    font-size: 15px;
+}
+.footer{
+    color: #ADADAD;
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

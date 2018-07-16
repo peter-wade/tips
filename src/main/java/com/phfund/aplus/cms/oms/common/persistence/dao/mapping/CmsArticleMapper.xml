@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.common.persistence.dao.CmsArticleMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.phfund.aplus.cms.oms.common.persistence.model.CmsArticle">
+		<id column="article_id" property="articleId" />
+		<result column="article_type" property="articleType" />
+		<result column="article_title" property="articleTitle" />
+		<result column="article_title_shortname" property="articleTitleShortname" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="pub_time" property="pubTime" />
+		<result column="audit_time" property="auditTime" />
+		<result column="status" property="status" />
+		<result column="author" property="author" />
+		<result column="summary" property="summary" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="article_sort" property="articleSort" />
+		<result column="article_source_type" property="articleSourceType" />
+		<result column="show_status" property="showStatus" />
+		<result column="article_url" property="articleUrl" />
+		<result column="article_attend_type" property="articleAttendType" />
+		<result column="server_file_name" property="articleImage" />
+		<result column="share_size" property="shareSize" />
+		<result column="read_size" property="readSize" />
+		<result column="thumbs_up_size" property="thumbsUpSize" />
+		<result column="collection_size" property="collectionSize" />
+		<result column="article_location_show" property="articleLocationShow" />
+		<result column="tag_id" property="tagId" />
+		<result column="imageUrl" property="imageUrl" />
+		<result column="article_acct_time" property="articleAcctTime" />
+		<result column="fund_code" property="fundCode" />
+		
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+      article_attend_type,article_title_shortname,collection_size,thumbs_up_size,read_size,
+      share_size,article_url,show_status, article_source_type,article_sort, article_id, 
+      article_type, article_title, start_time, end_time, pub_time, audit_time , 
+      status, author, summary, create_by, create_date, update_by, update_date ,<!--article_location_show ,-->article_acct_time,fund_code
+    </sql>
+    <insert id="addArticle" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsArticle">
+		insert into cms_article
+					(
+					article_attend_type,
+					article_title_shortname,
+					article_sort,
+					article_source_type,
+					show_status,
+					article_url,
+					article_id,
+					article_type,
+					article_title,
+					start_time,
+					end_time,
+					pub_time,
+					audit_time,
+					status,
+					author,
+					summary,
+					create_by,
+					create_date,
+					update_by,
+					update_date, 
+					<!--article_location_show -->
+					article_acct_time,
+					fund_code
+					)
+					values
+						(
+						#{articleAttendType},
+						#{articleTitleShortname},
+						#{articleSort},
+						#{articleSourceType},
+						#{showStatus},
+						#{articleUrl},
+						#{articleId},
+						#{articleType},
+						#{articleTitle},
+						#{startTime},
+						#{endTime},
+						#{pubTime},
+						#{auditTime},
+						'1',
+						#{author},
+						#{summary},
+						#{createBy},
+						sysdate(),
+						#{updateBy},
+						sysdate(),
+						<!-- #{articleLocationShow}, -->
+						#{articleAcctTime},
+						#{fundCode}
+					)
+	</insert>
+    
+     <select id="selectList" resultMap="BaseResultMap" resultType="List">
+       select 
+	  		<include refid="Base_Column_List" />
+       from cms_article t where t.data_state='1'
+		   <if test="articleTitle!=null and articleTitle!=''">
+				and t.article_title like CONCAT('%', #{articleTitle}, '%')
+		  </if>
+		   <if test="showStatus!=null and showStatus!=''">
+				and t.show_status =#{showStatus}
+		  </if>
+		   <if test="status!=null and status!=''">
+				and t.status =#{status}
+		  </if>
+		   <if test="articleType!=null and articleType!=''">
+				and t.article_type =#{articleType}
+		  </if>
+		   <if test="startTime!=null and startTime!=''">
+				and t.start_time &gt; #{startTime}
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and t.end_time &lt; #{endTime}
+			</if>
+			order by t.create_date desc
+    </select>
+    
+    <delete id="deleteById">
+       update cms_article t set t.data_state='0',t.update_date =SYSDATE() where article_id=#{id} and t.data_state='1'
+    </delete>
+    
+    
+    <update id="updateById">
+       update cms_article
+       set article_title=#{articleTitle},
+       article_title_shortname=#{articleTitleShortname},
+       article_sort=#{articleSort},
+       article_source_type=#{articleSourceType},
+       article_attend_type=#{articleAttendType},
+       article_type=#{articleType},
+       article_url=#{articleUrl},
+       start_time=#{startTime},
+       end_time=#{endTime},
+       author=#{author},
+       show_status=#{showStatus},
+       summary=#{summary},
+       <!--article_location_show =#{articleLocationShow}, -->
+       article_acct_time =#{articleAcctTime},
+       fund_code =#{fundCode}
+       where article_id=#{articleId}
+    </update>
+    
+    <select id="selectById" resultMap="BaseResultMap">
+       select 
+	  	 t.article_attend_type,t.article_title_shortname,t.collection_size,
+	  	  t.thumbs_up_size,t.read_size,share_size,t.article_url,t.show_status, 
+	  	  t.article_source_type,t.article_sort, t.article_id, t.article_type, 
+	  	  t.article_title, t.start_time, t.end_time, t.pub_time, t.audit_time , 
+	  	  t.status, t.author, t.summary, t.create_by, t.create_date, t.update_by, t.update_date
+	  	, s.server_file_name<!--  ,t.article_location_show -->,t.article_acct_time,t.fund_code
+       from cms_article t ,cms_file s where t.article_id=s.id  and t.article_id=#{id}
+    </select>
+    
+     <update id="pub">
+       update cms_article t set t.status='5',t.pub_time =SYSDATE(),t.update_date =SYSDATE() where t.article_id=#{articleId}
+    </update>
+    
+     <update id="offline">
+         update cms_article t set t.status='6',t.update_date =SYSDATE() where t.article_id=#{articleId}
+    </update>
+    
+
+    <select id ="queryRecommendCrticleList"  resultMap="BaseResultMap"  >
+         SELECT 
+			  atr.article_id,
+			  GROUP_CONCAT(atr.tag_id) tag_id,
+			  ca.article_title,
+			  ca.pub_time,
+			  f.server_file_name imageUrl,
+			  ca.read_size, 
+              ca.thumbs_up_size 
+			FROM
+			  article_tag_relation atr 
+			  INNER JOIN cms_article ca 
+			    ON ca.article_id = atr.article_id 
+			    AND ca.article_type = #{articleType} 
+			    AND ca.status = #{status}
+			    AND ca.show_status = #{showStatus}
+			    AND sysdate() between ca.start_time and ca.end_time
+			  LEFT JOIN cms_file f 
+			    ON atr.article_id = f.id 
+			WHERE atr.article_id !=#{articleId} 
+			GROUP BY atr.article_id,
+			  ca.article_title,
+			  ca.pub_time,
+			  f.server_file_name ,
+			  ca.read_size ,
+			  ca.thumbs_up_size 
+			ORDER BY ca.pub_time desc  
+    </select> 
+    
+    
+     <select id ="queryCrticleTagId"  resultMap="BaseResultMap"  >
+           SELECT 
+			  atr.article_id,
+			  GROUP_CONCAT(atr.tag_id) tag_id
+			FROM
+			   article_tag_relation  atr 
+			  INNER JOIN  cms_article  ca 
+			    ON ca.article_id  = atr. article_id  
+			    AND ca.article_type =#{articleType}
+			    AND ca.status =#{status}
+			    AND ca.show_status = #{showStatus}
+			    AND sysdate() between ca.start_time and ca.end_time
+			WHERE atr.article_id =#{articleId}
+			GROUP BY atr.article_id        
+    </select> 
+    <select id ="getOnTopSize"  resultType="int"  >
+		SELECT 
+		  COUNT(1) 
+		FROM
+		  cms_article t 
+		WHERE t.article_sort = 1 
+		  AND t.data_state = '1' 
+    </select> 
+    
+    <!-- 通用查询映射结果 -->
+	<resultMap id="actionInfoMap" type="com.phfund.aplus.cms.oms.common.persistence.model.ActionInfo">
+		<result column="actionsessno" property="actionSessid"/>
+		<result column="deviceid" property="deviceId"/>
+		<result column="phone" property="phoneNo"/>
+		<result column="ip" property="ip"/>
+		<result column="umengid" property="umengId"/>
+	</resultMap>
+	<select id="getDeviceId" parameterType="String" resultMap="actionInfoMap">
+        SELECT 
+		  t.deviceid,
+		  s.umengid 
+		FROM
+		  otsdata.USERINFO t,
+		  otsdata.deviceinfo s 
+		WHERE t.phone = #{phoneNo} and t.devicetype in(1,2) and rownum=1 and t.channel='1'
+		  AND t.deviceid = s.deviceid 
+    </select>
+    
+    
+    
+</mapper>

@@ -1,0 +1,309 @@
+@layout("/common/_commonAdd.html"){
+<div class="ibox float-e-margins">
+	<div class="ibox-content">
+		<div class="form-horizontal" id="noticeInfoForm">
+			<input type="hidden" name="layerDialogId" id="layerDialogId">
+			<input type="hidden" id="id" value="">
+			<form enctype="multipart/form-data" id="addForm" autocomplete="off">
+				<input type="hidden" id="content">
+				<div class="row">
+					<div class="col-sm-6">
+						<#input id="articleTitle" name="文章标题*" autocomplete="off"/>
+					</div>
+					<div class="col-sm-6">
+						<#input id="articleTitleShortname" name="标题简称*" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<#input id="articleSort" name="文章排序" value="100" />
+					</div>
+					<div class="col-sm-6">
+						<#ap_radioCon dictKey="show_status" title="是否展示*"
+							appId="aplus-camp" id="showStatus" name="showStatus" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<#input id="startTime" name="开始时间*" autocomplete="off"
+							clickFun="laydate({istime: true, format:'YYYY-MM-DD hh:mm:ss',isclear: true})" />
+					</div>
+					<div class="col-sm-6">
+						<#input id="endTime" name="结束时间*" autocomplete="off"
+							clickFun="laydate({istime: true, format:'YYYY-MM-DD hh:mm:ss',isclear: true})" />
+					</div>
+				</div>
+
+				<!-- <div class="row">
+					<div class="col-sm-6">
+						<#ap_select dictKey="article_location_show"
+							id="articleLocationShow" name="articleLocationShow" title="显示位置*" />
+					</div>
+				</div> -->
+
+				<div class="row">
+					<div class="col-sm-6">
+						<#ap_select dictKey="article_type" id="articleType"
+							name="articleType" title="文章类型*" />
+					</div>
+					<div class="col-sm-6">
+						<#ap_radioCon dictKey="show_status" value="N" title="是否来自外部"
+							appId="aplus-camp" id="articleSourceType"
+							name="articleSourceType" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<#input id="articleAcctTime" name="所属时间" autocomplete="off"
+							clickFun="laydate({istime: true, format:'YYYY-MM-DD hh:mm:ss'})" />
+					</div>
+					<div class="col-sm-6">
+						<#input id="fundCode" name="基金代码" />
+					</div>
+				</div>
+
+				<div class="row" style="margin-bottom: 5px;">
+					<div class="col-sm-6">
+						<#input id="articleUrl" name="文章URL" />
+					</div>
+					<div class="col-sm-6">
+						<#ap_selectCon id="articleAttendType" name="articleAttendType"
+							dictKey="article_attend_type" appId="aplus-cms" title="定向公共" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3">
+						<label class="col-sm-12 control-label"><span
+							style="color: red">*</span>缩略图226*142px</label>
+					</div>
+					<div class="col-sm-8">
+						<input name="articleImage" class="file" type="file" multiple
+							data-max-file-count="1" data-show-upload="false"
+							placeholder="缩略图大小请控制为：226px*142px">
+					</div>
+				</div>
+				<div class="row form-group" style="margin-bottom: 5px;">
+					<div class="col-sm-3">
+						<label class="col-sm-12 control-label"><span
+							style="color: red">*</span>文章摘要</label>
+					</div>
+					<div class="col-sm-8">
+						<textarea id="summary" style="width: 100%" name="summary" rows="5"
+							cols="103" placeholder="请输入资讯摘要用于资讯列表显示"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-3">
+						<label class="col-sm-12 control-label">资讯内容(宽690px)</label>
+					</div>
+					<div class="col-sm-9">
+						<div class="col-sm-12" style="line-height:40px;">
+							请选择资讯模板：
+							<select id="editorTemplateCode" name="editorTemplateCode" onchange="switchTemplate(this.value)" style="width:250px;">
+								<option>--请选择需要使用的模板--</option>
+							</select>
+						</div>
+						<div class="col-sm-12" id="articleContentDiv">
+							<textarea name="content" id="articleContent" style="width: 695px; height: 400px;"></textarea>&nbsp;
+                        </div>
+					</div>
+                </div>
+
+				<div class="row" style="margin-top: 10px;">
+					<div class="col-sm-3">
+						<label class="col-sm-12 control-label">选择标签</label>
+					</div>
+					<div class="col-sm-8">
+						<div class="demo" id="demoid">
+
+							<textarea id="tags" name="tagsNames"></textarea>
+							<script type="text/javascript">
+								var options = {
+									url : '/S100003/taglist',
+									data : {
+										tagCatalog : 'article'
+									},
+									type : "get",
+									async : true,
+									success : function(data) {
+										if (data && data.length > 0) {
+											var htmlStr = "";
+											for (var index = 0; index < data.length; index++) {
+												var current = data[index];
+												htmlStr += "<span style=\"margin-right:10px;cursor:pointer\" onclick=\"$('#tags').tagEditor('addTag', '"
+														+ current.tagName
+														+ "');\" class=\"ed_on pure-button button-sm\">"
+														+ current.tagName
+														+ "</span>";
+											}
+											$("#demoid").append(htmlStr);
+										}
+									}
+								};
+								$.ajax(options);
+							</script>
+						</div>
+					</div>
+				</div>
+				<!--row end-->
+			</form>
+		</div>
+		<div class="row btn-group-m-t">
+			<div class="col-sm-10">
+				<#button btnCss="info" name="提交" id="ensure" icon="fa-check"
+					clickFun="reloadHtmlContent();AplusAdd.submitByForm('/S100003/add','确定要添加该广告吗？')" />
+				<#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser"
+					clickFun="AplusAdd.close()" />
+				<#button btnCss="success" name="预览" id="preview" icon="fa-shield" clickFun="previewPage()"/>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- 上传控件 -->
+<!-- 上传控件 -->
+<script src="${ctxPath}/static/modular/system/cmsArticle/cmsArticle_info.js"></script>
+<link href="${ctxPath}/static/upload/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+<script src="${ctxPath}/static/upload/js/fileinput.js" type="text/javascript"></script>
+<script src="${ctxPath}/omsboot/static/js/common/aplus-form.js"></script>
+<!-- 百度编辑器 -->
+<script type="text/javascript" charset="utf-8" src="${ctxPath}/static/third-party/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${ctxPath}/static/third-party/ueditor/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="${ctxPath}/static/third-party/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<!-- w -->
+<link href="${ctxPath}/static/tag/jquery.tag-editor.css" media="all" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="${ctxPath}/static/tag/jquery.tag-editor.min.js"> </script>
+<script>
+	$("#articleUrl").attr('disabled', 'disabled');
+	var article = {};
+	article.validateFields = {
+		excluded : ':disabled',//关键配置，表示只对于禁用域不进行验证，其他的表单元素都要验证
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',//显示验证成功或者失败时的一个小图标
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		articleTitle : {
+			validators : {
+				notEmpty : {
+					message : '资讯标题不能为空！'
+				},
+				stringLength : {
+					min : 1,
+					max : 30,
+					message : '标题为1~30位!'
+				}
+			}
+		},
+		articleType : {
+			validators : {
+				notEmpty : {
+					message : '资讯类型不能为空！'
+				}
+			}
+		},
+		/* 	articleLocationShow : {
+				validators : {
+					notEmpty : {
+						message : '资讯显示位置不能为空！'
+					}
+				}
+			}, */
+	 	 fundCode : {
+			validators : {
+				stringLength : {
+					max : 10,
+					message : '基金代码最大10位！'
+				}
+			}
+		}, 	
+		articleAttendType : {
+			validators : {
+				notEmpty : {
+					message : '资讯推广类型不能为空！'
+				}
+			}
+		},
+		summary : {
+			validators : {
+				notEmpty : {
+					message : '资讯摘要不能为空！'
+				},
+				stringLength : {
+					min : 1,
+					max : 50,
+					message : '摘要为1~50位!'
+				}
+			}
+		},
+		articleImage : {
+			validators : {
+				notEmpty : {
+					message : '资讯缩略图不能为空！'
+				}
+			}
+		},
+		articleTitleShortname : {
+			validators : {
+				notEmpty : {
+					message : '资讯标题简称不能为空！'
+				},
+				stringLength : {
+					min : 1,
+					max : 20,
+					message : '标题简称为1~20位!'
+				}
+			}
+		},
+		articleSort : {
+			validators : {
+				regexp : {//正则验证  
+					regexp : '^[1-9]+[0-9]*',
+					message : '资讯排序只能输入正整数！'
+				}
+			}
+		},
+
+		endTime : {
+			validators : {
+				notEmpty : {
+					message : '结束时间不能为空'
+				},
+				callback : {
+					message : '结束日期不能小于等于开始日期',
+					callback : function(value, validator, $field) {
+						var begin = $('#startTime').val();
+						return value > begin;
+					}
+				}
+			}
+		},
+
+	};
+	$(function() {
+        Feng.initValidator("addForm", article.validateFields);
+        //初始化
+        $.post("${ctxPath}/S100007/",{groupCode:'article'},function(data){
+            if(data && data.length > 0 ){
+                templateArray = new Array() ;
+                for(var index = 0 ;index< data.length;index++){
+                    var obj = data[index];
+                    templateArray[obj.templateCode] = obj;
+                    $("#editorTemplateCode").append("<option value='"+obj.templateCode+"'>"+obj.templateName+"</option>");
+
+                }
+                switchTemplate("market");
+                $("#editorTemplateCode").val("market");
+            }
+        });
+    });
+
+	$('#tags').tagEditor({
+		initialTags : [ '' ],
+		delimiter : ', ', /* space and comma */
+		placeholder : '请输入资讯标签'
+	});
+</script>
+@}

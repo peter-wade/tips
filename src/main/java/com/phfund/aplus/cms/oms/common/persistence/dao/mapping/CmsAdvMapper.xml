@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phfund.aplus.cms.oms.common.persistence.dao.CmsAdvMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.phfund.aplus.cms.oms.common.persistence.model.CmsAdv">
+		<id column="adv_id" property="advId" />
+		<result column="adv_name" property="advName" />
+		<result column="adv_code" property="advCode" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="adv_position" property="advPosition" />
+		<result column="url_type" property="urlType" />
+		<result column="adv_url" property="advUrl" />
+		<result column="remark" property="remark" />
+		<result column="status" property="status" />
+		<result column="data_state" property="dataState" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="advsort" property="advSort" />
+		<result column="maxsize" property="maxSize" />
+		<result column="server_file_name" property="imgUrl" />
+		<result column="adv_type_attr" property="advTypeAttr" />
+		<result column="adv_type" property="advType" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        adv_id, adv_name, adv_code, start_time, end_time , adv_position, url_type, adv_url , remark, status, data_state, create_by , create_date, update_by, update_date,advsort,maxsize
+    </sql>
+    
+    
+    <resultMap id="advList" type="com.phfund.aplus.cms.oms.common.persistence.model.advList">
+		<result column="adv_url" property="adv_url" />
+		<result column="server_file_name" property="file_name" />
+	</resultMap>
+    
+     <select id="getAdvList" resultMap="advList" >
+       select 
+	  	t.adv_url,
+	  	s.server_file_name
+       from cms_adv t ,cms_file s where t.adv_id=s.id and t.data_state='1' and t.status='PUB' and t.adv_position=#{adv_position} and sysdate() between t.start_time and t.end_time  order by advsort limit #{size} 
+    </select>
+    
+    <select id="getSize" resultType="int">
+       select maxsize from cms_adv  order by create_date and data_state='1' limit 1 
+    </select>
+    
+     <insert id="addAdv" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsAdv">
+		insert into cms_adv
+					(
+					adv_id,
+					adv_name,
+					adv_code,
+					start_time,
+					end_time,
+					adv_position,
+					url_type,
+					adv_url,
+					remark,
+					status,
+					data_state,
+					create_by,
+					create_date,
+					update_by,
+					update_date,
+					maxsize,
+					advsort,
+					adv_type_attr,
+					adv_type
+					)
+					values
+						(
+						#{advId},
+						#{advName},
+						'advCode',
+						#{startTime},
+						#{endTime},
+						#{advPosition},
+						'http',
+						#{advUrl},
+						'remark',
+						#{status},
+						'1',
+						#{createBy},
+						sysdate(),
+						#{updateBy},
+						sysdate(),
+						5,
+						#{advSort},
+						#{advTypeAttr},
+						#{advType}
+					)
+	</insert>
+	
+	<update id="deleteAddv"  parameterType="String">
+	  update cms_adv t set t.data_state='0' where t.adv_id=#{cmsAdvId}
+	</update>
+	
+	 <select id="selectList" resultMap="BaseResultMap" resultType="List">
+       SELECT
+		  t.adv_id,
+		  t.adv_name,
+		  t.adv_code,
+		  t.start_time,
+		  t.end_time,
+		  t.adv_position,
+		  t.url_type,
+		  t.adv_url,
+		  t.remark,
+		  t.status,
+		  t.data_state,
+		  t.create_by,
+		  t.create_date,
+		  t.update_by,
+		  t.update_date,
+		  t.advsort,
+		  t.maxsize,
+		  t.adv_type,
+		  t.adv_type_attr,
+		  s.server_file_name
+		FROM
+		  cms_adv t,
+		  cms_file s
+		WHERE t.adv_id = s.id
+		  AND t.data_state = '1'
+		  <if test="status!=null and status!=''">
+			  and t.status = #{status}
+		  </if>
+		 <if test="advPosition!=null and advPosition!=''">
+			 and t.adv_position = #{advPosition}
+		 </if>
+		 <if test="advName!=null and advName!=''">
+			 and t.adv_name like concat('%',#{advName},'%')
+		 </if>
+		 <if test="startTime!=null and startTime!=''">
+			 and t.start_time &gt;= concat(#{startTime},' 00:00:00')
+		 </if>
+		 <if test="endTime!=null and endTime!=''">
+			 and t.end_time &gt;= concat(#{endTime},' 23:59:59')
+		 </if>
+    </select>
+    
+    <select id="selectById" resultMap="BaseResultMap" parameterType="String">
+        select 
+	  	t.adv_id, t.adv_name, t.adv_code, t.start_time, t.end_time , t.adv_position, t.url_type,
+	  	 t.adv_url , t.remark, t.status, t.data_state, t.create_by , t.create_date, t.update_by,
+	  	  t.update_date,t.advsort,t.maxsize,t.adv_type_attr,t.adv_type,
+	  	  s.server_file_name 
+       from cms_adv t ,cms_file s where t.adv_id=s.id and t.data_state='1' and t.adv_id=#{id}
+    </select>
+				
+     <update id="updateOne" parameterType="com.phfund.aplus.cms.oms.common.persistence.model.CmsAdv">
+       update cms_adv set 
+           adv_name=#{advName},
+	       start_time=#{startTime},
+	       end_time=#{endTime},
+	       adv_position=#{advPosition},
+	       adv_url=#{advUrl}, 
+	       status=#{status},
+	       update_by=#{updateBy},
+		   update_date=sysdate(),
+		   advsort=#{advSort},
+		   adv_type_attr=#{advTypeAttr},
+		   adv_type=#{advType}
+           where adv_id=#{advId}
+    
+    </update>
+    
+    <update id="updateMaxSize" parameterType="int">
+       update cms_adv set 
+		   maxsize=#{maxSize}
+    </update>
+    
+    
+
+</mapper>
